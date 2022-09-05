@@ -9,7 +9,6 @@ export const GlobalStyle = createGlobalStyle`
 
     :focus {
         outline: 0;
-        box-shadow: 0 0 0 2px ${(props) => props.theme.white};
     }
 
     body {
@@ -18,7 +17,7 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     body, input, textarea, button {
-        /* font-family: 'Nunito', sans-serif; */
+        font-family: 'Poppins', sans-serif;
         font-weight: 400;
         font-size: 1rem;
     }
