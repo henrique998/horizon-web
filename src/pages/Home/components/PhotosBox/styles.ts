@@ -40,6 +40,7 @@ export const PhotoBox = styled.li`
     width: 18.75rem;
     height: 18.75rem;
     border-radius: 10px;
+    object-fit: contain;
   }
 
   button {

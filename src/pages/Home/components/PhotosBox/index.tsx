@@ -1,9 +1,18 @@
 import { Trash } from 'phosphor-react'
-import womanImg from '../../../../assets/woman.png'
+import { Image } from '../../../../contexts/UploadContext'
+import { api } from '../../../../services/api'
 
 import { PhotosBoxContainer, PhotosContainer, PhotoBox } from './styles'
 
-export function PhotosBox() {
+interface PhotosBoxProps {
+  images: Image[]
+}
+
+export function PhotosBox({ images }: PhotosBoxProps) {
+  async function handleDeleteImage(imageId: string) {
+    await api.delete(`/photos/delete/${imageId}`)
+  }
+
   return (
     <section>
       <PhotosBoxContainer>
@@ -13,32 +22,21 @@ export function PhotosBox() {
         </header>
 
         <PhotosContainer>
-          <PhotoBox>
-            <img src={womanImg} alt="woman" />
+          {images
+            .sort(() => -1)
+            .map((image) => (
+              <PhotoBox key={image.id}>
+                <img src={image.url} alt="woman" />
 
-            <button type="button">
-              <Trash size={18} />
-              Delete
-            </button>
-          </PhotoBox>
-
-          <PhotoBox>
-            <img src={womanImg} alt="woman" />
-
-            <button type="button">
-              <Trash size={18} />
-              Delete
-            </button>
-          </PhotoBox>
-
-          <PhotoBox>
-            <img src={womanImg} alt="woman" />
-
-            <button type="button">
-              <Trash size={18} />
-              Delete
-            </button>
-          </PhotoBox>
+                <button
+                  type="button"
+                  onClick={() => handleDeleteImage(image.id)}
+                >
+                  <Trash size={18} />
+                  Delete
+                </button>
+              </PhotoBox>
+            ))}
         </PhotosContainer>
       </PhotosBoxContainer>
     </section>

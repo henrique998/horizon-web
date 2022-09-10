@@ -1,7 +1,7 @@
 import { NavLink } from './NavLink'
 
 import horizonLogo from '../../assets/logoWithText.svg'
-import womanImg from '../../assets/woman.png'
+import avatarIcon from '../../assets/avatarIcon.png'
 
 import {
   HeaderContainer,
@@ -12,8 +12,10 @@ import {
 } from './styles'
 import { Power } from 'phosphor-react'
 import { useState } from 'react'
+import { useAuth } from '../../hooks/useAuth'
 
 export function Header() {
+  const { user, handleSignOut } = useAuth()
   const [isSignOutButtonVisible, setIsSignOutButtonVisible] = useState(false)
 
   function handleChangeSignOutButtonVisibility() {
@@ -43,18 +45,26 @@ export function Header() {
 
         <AvatarWrapper>
           <span>
-            Hello, <strong>sofia</strong>
+            Hello, <strong>{user?.name}</strong>
           </span>
 
           <div>
-            <img
-              src={womanImg}
-              alt="woman"
-              onClick={handleChangeSignOutButtonVisibility}
-            />
+            {user.avatar_url ? (
+              <img
+                src={user?.avatar_url}
+                alt={`${user?.name}'s photo`}
+                onClick={handleChangeSignOutButtonVisibility}
+              />
+            ) : (
+              <img
+                src={avatarIcon}
+                alt=""
+                onClick={handleChangeSignOutButtonVisibility}
+              />
+            )}
 
             {isSignOutButtonVisible && (
-              <button type="button">
+              <button type="button" onClick={handleSignOut}>
                 <Power size={20} />
                 sign out
               </button>

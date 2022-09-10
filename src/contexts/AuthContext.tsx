@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { api } from '../services/axios'
+import { api } from '../services/api'
 
 type User = {
   id: string
@@ -36,6 +36,7 @@ type AuthContextData = {
   signUp: (data: SignUpCredentials) => Promise<void>
   handleSignOut: () => void
   user: User
+  setUser: (user: User) => void
 }
 
 interface AuthContextProviderProps {
@@ -66,18 +67,24 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   const signIn = useCallback(
     async ({ email, password }: SignInCredentials) => {
-      const response = await api.post<IResponse>('/session', {
-        email,
-        password,
-      })
+      try {
+        const response = await api.post<IResponse>('/session', {
+          email,
+          password,
+        })
 
-      const { token, userData } = response.data
+        const { token, userData } = response.data
 
-      setUser(userData)
+        setUser(userData)
 
-      localStorage.setItem('@horizon:token', token)
+        api.defaults.headers.common.Authorization = `Bearer ${token}`
 
-      navigate('/home')
+        localStorage.setItem('@horizon:token', token)
+
+        navigate('/home')
+      } catch (err) {
+        console.log(err)
+      }
     },
     [navigate],
   )
@@ -94,14 +101,22 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   function handleSignOut() {
     if (token) {
-      localStorage.removeItem('@wavy:token')
+      localStorage.removeItem('@horizon:token')
 
       navigate('/')
     }
   }
 
   return (
-    <AuthContext.Provider value={{ signIn, signUp, handleSignOut, user }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        setUser,
+        signIn,
+        signUp,
+        handleSignOut,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   )

@@ -32,6 +32,7 @@ type SignInFormData = zod.infer<typeof credentialsSignInFormSchema>
 
 export function SignIn() {
   const [isPasswordType, setIsPasswordType] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   const { signIn } = useAuth()
 
@@ -39,8 +40,10 @@ export function SignIn() {
     resolver: zodResolver(credentialsSignInFormSchema),
   })
 
-  async function handleSignIn(data: SignInFormData) {
-    await signIn(data)
+  async function handleSignIn({ email, password }: SignInFormData) {
+    setIsLoading(true)
+
+    await signIn({ email, password })
   }
 
   const { errors } = formState
@@ -72,8 +75,8 @@ export function SignIn() {
               <Input
                 placeholder="type your email"
                 type={'text'}
-                error={emailError}
                 {...register('email')}
+                error={emailError}
               />
             </FieldBox>
 
@@ -86,12 +89,12 @@ export function SignIn() {
                   isPasswordType ? <Eye size={22} /> : <EyeClosed size={22} />
                 }
                 onChangeType={handleChangeInputType}
-                error={passwordError}
                 {...register('password')}
+                error={passwordError}
               />
             </FieldBox>
 
-            <FormButton title="Sign In" />
+            <FormButton title="Sign In" isLoading={isLoading} />
           </form>
 
           <AccountMessage>

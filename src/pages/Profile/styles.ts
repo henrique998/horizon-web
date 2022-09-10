@@ -21,6 +21,7 @@ export const ProfileContainer = styled.section`
     height: 12.5rem;
     border-radius: 50%;
     border: 4px solid ${(props) => props.theme['base-brand-600']};
+    object-fit: cover;
   }
 
   form {

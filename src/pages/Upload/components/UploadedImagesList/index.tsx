@@ -1,7 +1,6 @@
 import { X } from 'phosphor-react'
 import { CircularProgressbar } from 'react-circular-progressbar'
 import 'react-circular-progressbar/dist/styles.css'
-
 import { useColors } from '../../../../hooks/useColors'
 import { useUpload } from '../../../../hooks/useUpload'
 
@@ -15,12 +14,12 @@ import {
 
 export function UploadedImagesList() {
   const { 'base-brand-900': strokeColor } = useColors()
-  const { uploadedImages } = useUpload()
+  const { uploadedImages, handleRemoveImage } = useUpload()
 
   return (
     <UploadedImagesListContainer>
       <ul>
-        {uploadedImages.map((image) => (
+        {uploadedImages?.map((image) => (
           <ImageItem key={image.id}>
             <ImageDetails>
               <img src={image.previewImg} alt="image" />
@@ -33,7 +32,7 @@ export function UploadedImagesList() {
 
             <ImageActions>
               {image.uploaded && (
-                <DeleteButton>
+                <DeleteButton onClick={() => handleRemoveImage(image.id)}>
                   <X size={16} weight={'bold'} />
                 </DeleteButton>
               )}

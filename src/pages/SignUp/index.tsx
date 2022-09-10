@@ -1,3 +1,5 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as zod from 'zod'
 import { Eye, EyeClosed } from 'phosphor-react'
 import { FormButton } from '../../components/FormButton'
 import { Input } from '../../components/Input'
@@ -13,28 +15,46 @@ import {
   SignUpContainer,
 } from './styles'
 import { useState } from 'react'
+import { useAuth } from '../../hooks/useAuth'
+import { useForm } from 'react-hook-form'
+
+const credentialsSignUpFormSchema = zod.object({
+  name: zod.string().trim().min(1, 'Campo obrigatório!'),
+  email: zod
+    .string()
+    .trim()
+    .min(1, 'Campo obrigatório')
+    .email('Infome um email válido!'),
+  password: zod.string().trim().min(6, 'Campo obrigatório!'),
+})
+
+type SignUpFormData = zod.infer<typeof credentialsSignUpFormSchema>
 
 export function SignUp() {
   const [isPasswordType, setIsPasswordType] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
-  //   const { signInWithCrendentials } = useAuth()
+  const { signUp } = useAuth()
 
-  //   const { register, handleSubmit, formState } = useForm<SignInFormData>({
-  //     resolver: zodResolver(credentialsSignInFormSchema),
-  //   })
+  const { register, handleSubmit, formState } = useForm<SignUpFormData>({
+    resolver: zodResolver(credentialsSignUpFormSchema),
+  })
 
-  //   function setAuthMethodInLocalStorage(method: string) {
-  //     localStorage.setItem('method', method)
-  //   }
+  async function handleSignUp(data: SignUpFormData) {
+    setIsLoading(true)
 
-  //   async function handleSignIn(data: SignInFormData) {
-  //     await signInWithCrendentials(data)
-  //   }
+    await signUp({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    })
+  }
 
-  //   const { errors } = formState
+  const { errors } = formState
 
-  //   const emailError = errors.email?.message
-  //   const passwordError = errors.password?.message
+  const nameError = errors.name?.message
+  const emailError = errors.email?.message
+  const passwordError = errors.password?.message
 
   function handleChangeInputType() {
     setIsPasswordType(!isPasswordType)
@@ -50,10 +70,25 @@ export function SignUp() {
             <p>Start sharing your photos with the world!</p>
           </header>
 
-          <form>
+          <form onSubmit={handleSubmit(handleSignUp)}>
+            <FieldBox>
+              <label htmlFor="name">Name</label>
+              <Input
+                placeholder="type your name"
+                type={'text'}
+                {...register('name')}
+                error={nameError}
+              />
+            </FieldBox>
+
             <FieldBox>
               <label htmlFor="email">E-mail</label>
-              <Input placeholder="type your email" type={'text'} />
+              <Input
+                placeholder="type your email"
+                type={'email'}
+                {...register('email')}
+                error={emailError}
+              />
             </FieldBox>
 
             <FieldBox>
@@ -65,14 +100,16 @@ export function SignUp() {
                   isPasswordType ? <Eye size={22} /> : <EyeClosed size={22} />
                 }
                 onChangeType={handleChangeInputType}
+                {...register('password')}
+                error={passwordError}
               />
             </FieldBox>
 
-            <FormButton title="Sign Up" />
+            <FormButton title="Sign Up" isLoading={isLoading} />
           </form>
 
           <AccountMessage>
-            Don&apos;t have an account? <a href="/sign-up">Sign up.</a>{' '}
+            Already have an account? <a href="/">Sign In.</a>{' '}
           </AccountMessage>
 
           <footer>&copy; Horizon Inc. 2022</footer>

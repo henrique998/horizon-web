@@ -1,6 +1,10 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-export const ButtonElement = styled.button`
+interface ButtonElementProps {
+  isLoading?: boolean
+}
+
+export const ButtonElement = styled.button<ButtonElementProps>`
   height: 3rem;
   width: 100%;
   text-align: center;
@@ -13,4 +17,10 @@ export const ButtonElement = styled.button`
   &:hover {
     filter: brightness(0.92);
   }
+
+  ${(props) =>
+    props.isLoading &&
+    css`
+      opacity: 0.75;
+    `}
 `

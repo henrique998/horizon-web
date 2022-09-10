@@ -6,7 +6,6 @@ export function App() {
   return (
     <Providers>
       <Router />
-
       <GlobalStyle />
     </Providers>
   )

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const token = localStorage.getItem('@wavy:token')
+const token = localStorage.getItem('@horizon:token')
 
 export const api = axios.create({
   baseURL: 'http://localhost:3333',
