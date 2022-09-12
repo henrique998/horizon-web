@@ -9,7 +9,7 @@
 
 O horizon é um app de upload de fotos desenvolvido em react que tem como objetivo demonstrar como esta funcionalidade interage com uma api desenvolvida em nodejs. 
 
-Este projeto foi desenvolvido pensando para se parecer com o instagram. O fluxo é bem simples: o usuário cria uma conta, faz login e ao realizar algum upload a foto é atrelada a este usuário. O usuário pode atualizar a sua foto de perfil caso deseje.
+Este projeto foi pensado para se parecer com o instagram em alguns aspectos. O fluxo é bem simples: o usuário cria uma conta, faz login e ao realizar algum upload a foto é atrelada a este usuário. O usuário pode atualizar a sua foto de perfil caso deseje.
 
 ## 💻 Principais Tecnologias utilizadas no projeto
 
