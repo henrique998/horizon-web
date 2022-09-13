@@ -1,6 +1,5 @@
 <div align="center">
   <img src="horizon-home.png" width="100%" />
-  <h3>Sistema de autenticação desenvolvido sem bibliotecas.</h3>
 </div>
 
 ## 📃 Sobre
